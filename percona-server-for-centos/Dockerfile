@@ -6,7 +6,6 @@ MAINTAINER gywndi <gywndi@gmail.com>
 RUN useradd -u 1001 -r -g 0 -m -s /bin/bash -c "Default Application User" mysql
 
 ENV PERCONA_MAJOR 57
-ENV PERCONA_VERSION 5.7.18-16-4.jessie
 
 RUN yum -y update 
 RUN yum -y install http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm 
