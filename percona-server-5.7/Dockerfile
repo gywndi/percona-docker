@@ -16,7 +16,8 @@ It provides superior performance, scalability and instrumentation."
 LABEL org.opencontainers.image.license="GPL"
 LABEL org.opencontainers.image.authors="info@percona.com"
 
-ENV PS_VERSION 5.7.31-34.1
+#ENV PS_VERSION 5.7.31-34.1
+ENV PS_VERSION 5.7.34-37.1
 ENV OS_VER el8
 ENV FULL_PERCONA_VERSION "$PS_VERSION.$OS_VER"
 LABEL org.label-schema.schema-version=${PS_VERSION}
@@ -81,10 +82,13 @@ RUN /usr/bin/install -m 0775 -o mysql -g root -d /var/lib/mysql /var/run/mysqld 
 	ln -s /etc/my.cnf.d /etc/mysql; \
 # allow to change config files
 	chown -R mysql:root /etc/percona-server.cnf /etc/percona-server.conf.d /etc/my.cnf.d; \
-	chmod -R ug+rwX /etc/percona-server.cnf /etc/percona-server.conf.d /etc/my.cnf.d
+	chmod -R ug+rwX /etc/percona-server.cnf /etc/percona-server.conf.d /etc/my.cnf.d; \
+	echo "LD_PRELOAD=/usr/lib64/libjemalloc.so.1" >> /etc/default/mysql; \
+	echo "THP_SETTING=never" >> /etc/default/mysql
 
-VOLUME ["/var/lib/mysql", "/var/log/mysql"]
+VOLUME ["/var/lib/mysql"]
 
+COPY my.cnf /etc/my.cnf.d/my.cnf
 COPY ps-entry.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
